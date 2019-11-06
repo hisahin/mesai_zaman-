@@ -1,0 +1,66 @@
+CREATE OR REPLACE FUNCTION sahin(d1 timestamp, d2 timestamp) 
+RETURNS text AS $$
+DECLARE
+gunfark smallint;
+haftafark smallint;
+haftag1 smallint;
+haftag2 smallint;
+saat1 smallint;
+saat2 smallint;
+fark integer;
+gun integer;
+saat integer;
+dakika integer;
+sonuc text;
+BEGIN
+	haftag1=(select extract(dow from d1));
+	haftag2=(select extract(dow from d2));
+	saat1=(select extract(hour from d1));
+	saat2=(select extract(hour from d2));
+	IF haftag1=6 THEN
+	d1=(date_trunc('day',(d1 + interval '2 day'))+ '08:30:00');
+	END IF;	
+	IF haftag1=0 THEN
+	d1=(date_trunc('day',(d1 + interval '1 day'))+ '08:30:00');
+	END IF;	
+	IF haftag2=6 THEN
+	d2=(date_trunc('day',(d2 + interval '2 day'))+ '08:30:01');
+	END IF;	
+	IF haftag1=0 THEN
+	d2=(date_trunc('day',(d1 + interval '1 day'))+ '08:30:01');
+	END IF;
+	IF saat1<8 THEN
+	d1=(select date_trunc('day',d1) + '08:30:00');
+	END IF;
+	IF saat2<8 THEN
+	d2=(select date_trunc('day',d2) + '08:30:00');
+	END IF;	
+	IF saat1>18 THEN
+	d1=(select date_trunc('day',d1) + '17:30:00');
+	END IF;	
+	IF saat2>18 THEN
+	d2=(select date_trunc('day',d2) + '17:30:00');	
+	END IF;
+	gunfark=(select extract(doy from d2)) - (select extract(doy from d1));
+	haftafark=(select extract(week from d2)) - (select extract(week from d1));
+	RAISE NOTICE '%', d1;
+	RAISE NOTICE '%', d2;
+	IF haftafark=0 THEN
+		IF gunfark=0 THEN
+		fark=(select extract(epoch from (d2-d1)));
+		END IF;		
+		IF gunfark>0 THEN
+		fark=((select extract(epoch from (d2-d1))) - (3600 * gunfark * 15))  ;
+		END IF;
+	END IF;
+	IF haftafark>0 THEN
+	fark=(((select extract(epoch from (d2-d1)))-(3600 * gunfark * 15))-(haftafark * 3600 * 18));
+	END IF;	
+	gun=(fark/86400);		
+	saat=mod(fark,86400)/3600;	
+	dakika=mod(fark,3600)/60;
+	sonuc=gun || ' gün ' || saat || ' saat ' || dakika || ' dakika ' ;
+	RETURN sonuc;
+END; 
+$$
+LANGUAGE PLPGSQL;
