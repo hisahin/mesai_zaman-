@@ -1,0 +1,1 @@
+select unnest(regexp_matches(sahin.pg_ls_dir, 'pgsql_tmp([0-9]*)')) AS pid,sum((pg_stat_file('/pgsql/log/pg_temp/'||sahin.pg_ls_dir)).size) as boyut from (select pg_ls_dir('/pgsql/log/pg_temp/')) as sahin group by 1;
