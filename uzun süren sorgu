@@ -1,0 +1,1 @@
+cat postgresql-2020.02.11.13.log | sort -nk 17 | tail -1
