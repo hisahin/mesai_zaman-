@@ -1,0 +1,7 @@
+DELETE FROM tablo_adi a USING (
+      SELECT MIN(ctid) as ctid, pkid
+        FROM tablo_adi 
+        GROUP BY pkid HAVING COUNT(*) > 1
+      ) b
+      WHERE a.pkid = b.pkid 
+      AND a.ctid <> b.ctid;
