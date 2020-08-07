@@ -1,0 +1,5 @@
+ss -tn  | awk '{print $5}' | cut -d: -f1 | sort | uniq -c  | awk '{print $2}' > sahin
+
+comm --nocheck-order --output-delimiter=+ sahin aslan | sed 's/+//g' > kamil
+
+cat kamil > aslan
