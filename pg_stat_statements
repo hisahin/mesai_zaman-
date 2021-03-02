@@ -1,0 +1,7 @@
+SELECT 
+  round(total_time / 1000 / 60) as suresi, 
+  round(total_time/calls) as adeti, 
+  query 
+FROM pg_stat_statements 
+ORDER BY 1 DESC 
+LIMIT 10;
