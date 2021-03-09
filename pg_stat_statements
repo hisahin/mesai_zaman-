@@ -1,7 +1,6 @@
-SELECT 
-  round(total_time / 1000 / 60) as suresi, 
-  round(total_time/calls) as adeti, 
+SELECT calls,max_time,min_time,                                                                               
+  round( total_time / 1000 / 60)  as total, 
+  round(total_time/calls) as avg, 
   query 
-FROM pg_stat_statements 
-ORDER BY 1 DESC 
-LIMIT 10;
+FROM pg_stat_statements where calls > 100 and max_time> 1000 and min_time>1000  
+ORDER BY 5 DESC LIMIT 10;
