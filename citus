@@ -1,0 +1,16 @@
+---workerda---
+apt-get -y install postgresql-13-citus-10.1
+pg_conftool 13 main set shared_preload_libraries citus
+pg_conftool 13 main set listen_addresses '*'
+echo 'host	citus		postgres	10.10.10.10/28        trust' >> /etc/postgresql/13/main/pg_hba.conf
+systemctl restart postgresql
+create database citus  ENCODING 'UTF8' LC_COLLATE 'tr_TR.UTF-8' LC_CTYPE 'tr_TR.UTF-8' TEMPLATE template0;
+\c citus
+create extension citus;
+
+
+---kordinatörde---
+SELECT * from citus_add_node('10.10.10.10', 5432);
+SELECT * FROM citus_get_active_worker_nodes();
+SELECT create_distributed_table('tablo','kolon');
+SELECT alter_distributed_table ('tablo', shard_count := 60);
