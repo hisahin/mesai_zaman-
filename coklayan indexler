@@ -1,0 +1,1 @@
+select tablename as tablo ,rtrim(reverse(split_part(reverse(indexdef), '(' , 1)),')') as kolon,count(*) from pg_indexes where schemaname='semadi' GROUP BY 1,2 HAVING COUNT(*) > 1;
