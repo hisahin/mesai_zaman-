@@ -1,0 +1,13 @@
+create function chk(anyelement)
+  returns bool 
+  language plpgsql as $f$ 
+    declare t text; 
+    begin t := $1; 
+      return false; 
+      exception when others then return true; 
+    end; 
+  $f$;
+  
+  
+  
+  select ctid from table where chk(table);
