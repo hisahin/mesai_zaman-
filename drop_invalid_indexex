@@ -1,0 +1,1 @@
+select 'DROP INDEX CONCURRENTLY ' || schemaname || '.' || indexname || ';' from pg_indexes join (SELECT relname FROM pg_class, pg_index WHERE pg_index.indisvalid =false AND pg_index.indexrelid = pg_class.oid ) test on indexname=test.relname;
